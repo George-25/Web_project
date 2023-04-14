@@ -1,4 +1,6 @@
 import os
+import sqlite3
+import cgi
 from flask import Flask, render_template, redirect, request, make_response, session, abort, jsonify
 from data import db_session, news_api
 from data.users import User
@@ -9,7 +11,6 @@ from forms.news import NewsForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import reqparse, abort, Api, Resource
 from data import news_resources
-
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -55,13 +56,12 @@ def cookie_test():
 
 @app.route("/")
 def index():
-    db_sess = db_session.create_session()
-    if current_user.is_authenticated:
-        news = db_sess.query(News).filter(
-            (News.user == current_user) | (News.is_private != True))
-    else:
-        news = db_sess.query(News).filter(News.is_private != True)
-    return render_template("index.html", news=news)
+    return render_template("index.html")
+
+our_form = cgi.FieldStorage()
+name_city = our_form.getfirst("name_city")
+print(name_city)
+
 
 
 @app.route('/logout')
@@ -69,6 +69,7 @@ def index():
 def logout():
     logout_user()
     return redirect("/")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

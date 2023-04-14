@@ -1,5 +1,5 @@
-    <!doctype html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,11 +10,17 @@
     <title>{{title}}</title>
 </head>
 <body>
+    <style>
+body {
+  color: #eee;
+  background: #21293b;
+}
+</style>
 <header>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">Наше приложение</a>
+    <nav class="navbar navbar-light bg-dark">
+        <button class="btn-toggle">&#127774;</button>
         {% if current_user.is_authenticated %}
-            <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+            <a class="navbar-brand text-light" href="/logout">{{ current_user.name }}</a>
         {% else %}
             <p>
                 <a class="btn btn-primary " href="/register">Зарегистрироваться</a>

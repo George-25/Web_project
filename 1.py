@@ -1,21 +1,17 @@
 import os
 import sqlite3
-import cgi
-from flask import Flask, render_template, redirect, request, make_response, session, abort, jsonify
-from data import db_session, news_api
+from flask import Flask, render_template, redirect, request, make_response, session, jsonify
+from data import db_session
 from data.users import User
-from data.news import News
-import datetime
 from forms.user import RegisterForm, LoginForm
-from forms.news import NewsForm
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from flask_restful import reqparse, abort, Api, Resource
-from data import news_resources
+from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_restful import Api
 
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+yandex_weather_key = '4498796d-b748-4529-8743-c9579e4e1d5c'
 api = Api(app)
 
 
@@ -58,10 +54,20 @@ def cookie_test():
 def index():
     return render_template("index.html")
 
-our_form = cgi.FieldStorage()
-name_city = our_form.getfirst("name_city")
-print(name_city)
 
+@app.route('/get-text', methods=['GET', 'POST'])
+def foo():
+    name_city = request.form['name_city']
+
+    # conn = sqlite3.connect('db/blogs.db')
+    # with conn:
+    #     conn.execute(f"""INSERT INTO {name_table}(city)
+    #                         VAlUES({name_city});
+    #                         """)
+    # conn.commit()
+    # conn.close()
+    print(name_city)
+    return render_template("index.html")
 
 
 @app.route('/logout')
@@ -107,82 +113,21 @@ def reqister():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
+
+        conn = sqlite3.connect('db/blogs.db')
+        with conn:
+            conn.execute(f"""CREATE TABLE {form.name.data}(
+                        id INT PRIMARY KEY,
+                        city TEXT);
+                        """)
+        conn.commit()
+        conn.close()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
 
-# @app.route('/news',  methods=['GET', 'POST'])
-# @login_required
-# def add_news():
-#     form = NewsForm()
-#     if form.validate_on_submit():
-#         db_sess = db_session.create_session()
-#         news = News()
-#         news.title = form.title.data
-#         news.content = form.content.data
-#         news.is_private = form.is_private.data
-#         current_user.news.append(news)
-#         db_sess.merge(current_user)
-#         db_sess.commit()
-#         return redirect('/')
-#     return render_template('news.html', title='Добавление новости',
-#                            form=form)
-#
-#
-# @app.route('/news&<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def edit_news(id):
-#     form = NewsForm()
-#     if request.method == "GET":
-#         db_sess = db_session.create_session()
-#         news = db_sess.query(News).filter(News.id == id,
-#                                           News.user == current_user
-#                                           ).first()
-#         if news:
-#             form.title.data = news.title
-#             form.content.data = news.content
-#             form.is_private.data = news.is_private
-#         else:
-#             abort(404)
-#     if form.validate_on_submit():
-#         db_sess = db_session.create_session()
-#         news = db_sess.query(News).filter(News.id == id,
-#                                           News.user == current_user
-#                                           ).first()
-#         if news:
-#             news.title = form.title.data
-#             news.content = form.content.data
-#             news.is_private = form.is_private.data
-#             db_sess.commit()
-#             return redirect('/')
-#         else:
-#             abort(404)
-#     return render_template('news.html',
-#                            title='Редактирование новости',
-#                            form=form
-#                            )
-#
-#
-# @app.route('/news_delete&<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def news_delete(id):
-#     db_sess = db_session.create_session()
-#     news = db_sess.query(News).filter(News.id == id,
-#                                       News.user == current_user
-#                                       ).first()
-#     if news:
-#         db_sess.delete(news)
-#         db_sess.commit()
-#     else:
-#         abort(404)
-#     return redirect('/')
-
-
 def main():
     db_session.global_init("db/blogs.db")
-    # app.register_blueprint(news_api.blueprint)
-    # api.add_resource(news_resources.NewsListResource, '/api/v2/news')
-    # api.add_resource(news_resources.NewsResource, '/api/v2/news&<int:news_id>')
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 

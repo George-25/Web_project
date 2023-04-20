@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import requests
 from flask import Flask, render_template, redirect, request, make_response, session, jsonify
 from data import db_session
 from data.users import User
@@ -11,8 +12,12 @@ app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-yandex_weather_key = '4498796d-b748-4529-8743-c9579e4e1d5c'
+appid = "078007e7d84335abcc1c77d2160b20e3"
 api = Api(app)
+
+
+def upcase_first_letter(s):
+    return s[0].upper() + s[1:]
 
 
 @app.errorhandler(404)
@@ -57,8 +62,7 @@ def index():
 
 @app.route('/get-text', methods=['GET', 'POST'])
 def foo():
-    name_city = request.form['name_city']
-
+    name_city = f"{request.form['name_city']},RU"
     # conn = sqlite3.connect('db/blogs.db')
     # with conn:
     #     conn.execute(f"""INSERT INTO {name_table}(city)
@@ -66,8 +70,30 @@ def foo():
     #                         """)
     # conn.commit()
     # conn.close()
-    print(name_city)
-    return render_template("index.html")
+    try:
+        res = requests.get("http://api.openweathermap.org/data/2.5/weather",
+                           params={'q': name_city, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
+        data = res.json()
+        par = 'Openweathermap.org'
+        par_0 = f"{request.form['name_city']}"
+        par_1 = f"{upcase_first_letter(data['weather'][0]['description'])}"
+        par_2 = f"Температура: {data['main']['temp']} ℃"
+        par_3 = f"Ощущается как: {data['main']['feels_like']} ℃"
+        par_4 = f"Минимальная температура: {data['main']['temp_min']} ℃"
+        par_5 = f"Максимальная температура: {data['main']['temp_max']} ℃"
+        par_6 = f"Атмосферное давление: {data['main']['pressure']} hPa"
+        par_7 = f"Влажность воздуха: {data['main']['humidity']} %"
+    except Exception as e:
+        par_1 = 'Город с таким названием не найден.'
+        par_2 = ''
+        par_3 = ''
+        par_4 = ''
+        par_5 = ''
+        par_6 = ''
+        par_7 = ''
+    return render_template("index.html", par=par, par_0=par_0, par_1=par_1, par_2=par_2, par_3=par_3, par_4=par_4,
+                           par_5=par_5, par_6=par_6,
+                           par_7=par_7)
 
 
 @app.route('/logout')

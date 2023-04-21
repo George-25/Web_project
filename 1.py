@@ -13,6 +13,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 appid = "078007e7d84335abcc1c77d2160b20e3"
+accuweather_key = "xVwx5iGlsnoziBNp1ZbGJJnJ1PfO1tPh"
 api = Api(app)
 
 
@@ -71,6 +72,7 @@ def foo():
     # conn.commit()
     # conn.close()
     try:
+        # -------------------------------------------------------------------------------------
         res = requests.get("http://api.openweathermap.org/data/2.5/weather",
                            params={'q': name_city, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
         data = res.json()
@@ -83,7 +85,24 @@ def foo():
         par_5 = f"Максимальная температура: {data['main']['temp_max']} ℃"
         par_6 = f"Атмосферное давление: {data['main']['pressure']} hPa"
         par_7 = f"Влажность воздуха: {data['main']['humidity']} %"
+        # --------------------------------------------------------------------------------------
+        # res_location = requests.get("http://dataservice.accuweather.com/locations/v1/cities/search?",
+        #                             params={'apikey': accuweather_key, 'q': name_city, 'language': 'ru'})
+        # data_2 = res_location.json()
+        # lok_key = data_2[0]['Key']
+        # res_temp = requests.get(f"http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/{lok_key}",
+        #                         params={'apikey': accuweather_key, 'metric': 'true',
+        #                                 'language': 'ru'})
+        # data_3 = res_temp.json()
+        # par0 = 'Accuweather.com'
+        # par1 = 'Сводка за полседний час'
+        # par2 = f"{request.form['name_city']}"
+        # par3 = f"{upcase_first_letter(data_3[0]['IconPhrase'])}"
+        # par4 = f"Температура: {data_3[0]['Temperature']['Value']} ℃"
+        # par5 = f"Вероятность осадков: {data_3[0]['PrecipitationProbability']} %"
     except Exception as e:
+        par = ''
+        par_0 = ''
         par_1 = 'Город с таким названием не найден.'
         par_2 = ''
         par_3 = ''
@@ -91,8 +110,15 @@ def foo():
         par_5 = ''
         par_6 = ''
         par_7 = ''
+        # par0 = ''
+        # par1 = ''
+        # par2 = ''
+        # par3 = ''
+        # par4 = ''
+        # par5 = ''
     return render_template("index.html", par=par, par_0=par_0, par_1=par_1, par_2=par_2, par_3=par_3, par_4=par_4,
                            par_5=par_5, par_6=par_6,
+                           # par0=par0, par1=par1, par2=par2, par3=par3, par4=par4, par5=par5,
                            par_7=par_7)
 
 

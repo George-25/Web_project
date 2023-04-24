@@ -12,28 +12,9 @@
                 <button type="submit" class="btn btn-outline-light">Найти</button>
             </div>
         </form>
-        <div class="row gy-3">
-            <h2>{{par}}</h2>
-            <h3>{{par_0}}</h3>
-            <p1> {{par_1}}</p1>
-            <p1> {{par_2}}</p1>
-            <p1> {{par_3}}</p1>
-            <p1> {{par_4}}</p1>
-            <p1> {{par_5}}</p1>
-            <p1> {{par_6}}</p1>
-            <p1> {{par_7}}</p1>
-        </div>
         {% else %}
         <h2 class="display-6"> Для получения сведений о погоде пройдите авторизацию или зарегистрируйтесь на сайте.</h2>
-        {% endif %}
-        {% for item in news%}
-        <div class="col-md6 border rounded">
-            <h2>{{item.title}}</h2>
-            <div>
-                {{item.content}}
-            </div>
-        </div>
     </div>
 </div>
-{% endfor %}
+{% endif %}
 {% endblock %}

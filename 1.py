@@ -64,6 +64,8 @@ def index():
 @app.route('/get-text', methods=['GET', 'POST'])
 def foo():
     name_city = f"{request.form['name_city']},RU"
+    name_city2 = request.form['name_city']
+    city_param = name_city2
     # conn = sqlite3.connect('db/blogs.db')
     # with conn:
     #     conn.execute(f"""INSERT INTO {name_table}(city)
@@ -72,12 +74,10 @@ def foo():
     # conn.commit()
     # conn.close()
     try:
-        # -------------------------------------------------------------------------------------
         res = requests.get("http://api.openweathermap.org/data/2.5/weather",
                            params={'q': name_city, 'units': 'metric', 'lang': 'ru', 'APPID': appid})
         data = res.json()
-        par = 'Openweathermap.org'
-        par_0 = f"{request.form['name_city']}"
+        par_0 = 'Openweathermap.org'
         par_1 = f"{upcase_first_letter(data['weather'][0]['description'])}"
         par_2 = f"Температура: {data['main']['temp']} ℃"
         par_3 = f"Ощущается как: {data['main']['feels_like']} ℃"
@@ -86,40 +86,40 @@ def foo():
         par_6 = f"Атмосферное давление: {data['main']['pressure']} hPa"
         par_7 = f"Влажность воздуха: {data['main']['humidity']} %"
         # --------------------------------------------------------------------------------------
-        # res_location = requests.get("http://dataservice.accuweather.com/locations/v1/cities/search?",
-        #                             params={'apikey': accuweather_key, 'q': name_city, 'language': 'ru'})
-        # data_2 = res_location.json()
-        # lok_key = data_2[0]['Key']
-        # res_temp = requests.get(f"http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/{lok_key}",
-        #                         params={'apikey': accuweather_key, 'metric': 'true',
-        #                                 'language': 'ru'})
-        # data_3 = res_temp.json()
-        # par0 = 'Accuweather.com'
-        # par1 = 'Сводка за полседний час'
-        # par2 = f"{request.form['name_city']}"
-        # par3 = f"{upcase_first_letter(data_3[0]['IconPhrase'])}"
-        # par4 = f"Температура: {data_3[0]['Temperature']['Value']} ℃"
-        # par5 = f"Вероятность осадков: {data_3[0]['PrecipitationProbability']} %"
+        res_location = requests.get("http://dataservice.accuweather.com/locations/v1/cities/search?",
+                                    params={'apikey': accuweather_key, 'q': name_city2, 'language': 'ru'})
+        data_2 = res_location.json()
+        lok_key = data_2[0]['Key']
+        res_temp = requests.get(f"http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/{lok_key}",
+                                params={'apikey': accuweather_key, 'metric': 'true',
+                                        'language': 'ru'})
+        data_3 = res_temp.json()
+        par0 = 'Accuweather.com'
+        par1 = 'Сводка за полседний час:'
+        par2 = f"{upcase_first_letter(data_3[0]['IconPhrase'])}"
+        par3 = f"Температура: {data_3[0]['Temperature']['Value']} ℃"
+        par4 = f"Вероятность осадков: {data_3[0]['PrecipitationProbability']} %"
     except Exception as e:
-        par = ''
+        city_param = 'Город с таким названием не найден.'
         par_0 = ''
-        par_1 = 'Город с таким названием не найден.'
+        par_1 = ''
         par_2 = ''
         par_3 = ''
         par_4 = ''
         par_5 = ''
         par_6 = ''
         par_7 = ''
-        # par0 = ''
-        # par1 = ''
-        # par2 = ''
-        # par3 = ''
-        # par4 = ''
-        # par5 = ''
-    return render_template("index.html", par=par, par_0=par_0, par_1=par_1, par_2=par_2, par_3=par_3, par_4=par_4,
-                           par_5=par_5, par_6=par_6,
-                           # par0=par0, par1=par1, par2=par2, par3=par3, par4=par4, par5=par5,
-                           par_7=par_7)
+        par0 = ''
+        par1 = ''
+        par2 = ''
+        par3 = ''
+        par4 = ''
+    return render_template("get_text.html",
+                           city_param=city_param,
+                           par_0=par_0, par_1=par_1, par_2=par_2, par_3=par_3, par_4=par_4, par_5=par_5, par_6=par_6,
+                           par0=par0, par1=par1, par2=par2, par3=par3, par4=par4,
+                           par_7=par_7
+                           )
 
 
 @app.route('/logout')

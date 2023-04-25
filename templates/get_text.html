@@ -11,41 +11,52 @@
                        aria-label="Ввод текста с помощью кнопки сегментированного раскрывающегося списка">
                 <button type="submit" class="btn btn-outline-light">Найти</button>
             </div>
-            <div class="row gy-5">
-                <h2 class="display-5">{{city_param}}</h2>
-                <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <h2>{{par_0}}</h2>
-                            <p>{{par_1}}</p>
-                            <p>{{par_2}}</p>
-                            <p>{{par_3}}</p>
-                            <p>{{par_4}}</p>
-                            <p>{{par_5}}</p>
-                            <p>{{par_6}}</p>
-                            <p>{{par_7}}</p>
-                        </div>
-                        <div class="carousel-item">
-                            <h2>{{par0}}</h2>
-                            <h5>{{par1}}</h5>
-                            <p>{{par2}}</p>
-                            <p>{{par3}}</p>
-                            <p>{{par4}}</p>
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button"
-                            data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="false"></span>
-                        <span class="visually-hidden">Предыдущий</span>
-                    </button>
-                    <button class="carousel-control-next" type="button"
-                            data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Следующий</span>
-                    </button>
-                </div>
-            </div>
         </form>
+        <div class="row gy-5">
+            <h2 class="display-5">{{city_param}}</h2>
+            <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <h2>{{openweather_par0}}</h2>
+                        <p>{{openweather_par1}}</p>
+                        <p>{{openweather_par2}}</p>
+                        <p>{{openweather_par3}}</p>
+                        <p>{{openweather_par4}}</p>
+                        <p>{{openweather_par5}}</p>
+                        <p>{{openweather_par6}}</p>
+                        <p>{{openweather_par7}}</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h2>{{accuweather_par0}}</h2>
+                        <h5>{{accuweather_par1}}</h5>
+                        <p>{{accuweather_par2}}</p>
+                        <p>{{accuweather_par3}}</p>
+                        <p>{{accuweather_par4}}</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h2>{{weatherapi_par0}}</h2>
+                        <p>{{weatherapi_par1}}</p>
+                        <p>{{weatherapi_par2}}</p>
+                        <p>{{weatherapi_par3}}</p>
+                        <p>{{weatherapi_par4}}</p>
+                        <p>{{weatherapi_par5}}</p>
+                        <p>{{weatherapi_par6}}</p>
+                        <p>{{weatherapi_par7}}</p>
+                        <p>{{weatherapi_par8}}</p>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button"
+                        data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                    <span class="visually-hidden">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                        data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Следующий</span>
+                </button>
+            </div>
+        </div>
         {% else %}
         <h2 class="display-6"> Для получения сведений о погоде пройдите авторизацию или зарегистрируйтесь на сайте.</h2>
         {% endif %}

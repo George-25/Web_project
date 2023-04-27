@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container overflow-hidden text-center">
     <div class="row gy-5">
-        <h2 class="display-1">Погода</h2>
+        <h2 class="display-1">Погода <img src="static/weather_pictures/picture1.png" width="155" height="110"></h2>
         {% if current_user.is_authenticated %}
-        <form action="/get-text" method="post">
+        <form action="/weather_forecast" method="post">
             <div class="input-group">
                 <input type="text" class="form-control" name="name_city" placeholder="Введите название города"
                        aria-label="Ввод текста с помощью кнопки сегментированного раскрывающегося списка">

@@ -62,8 +62,8 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/get-text', methods=['GET', 'POST'])
-def foo():
+@app.route('/weather_forecast', methods=['GET', 'POST'])
+def weather_forecast():
     name_city = f"{request.form['name_city']},RU"
     name_city2 = request.form['name_city']
     city_param = name_city2
@@ -92,14 +92,18 @@ def foo():
         data_2 = res_location.json()
         lok_key = data_2[0]['Key']
         res_temp = requests.get(f"http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/{lok_key}",
-                                params={'apikey': accuweather_key, 'metric': 'true',
+                                params={'apikey': accuweather_key, 'metric': 'true', 'details': 'true',
                                         'language': 'ru'})
         data_3 = res_temp.json()
         accuweather_par0 = 'Accuweather.com'
         accuweather_par1 = 'Сводка за полседний час:'
         accuweather_par2 = f"{upcase_first_letter(data_3[0]['IconPhrase'])}"
         accuweather_par3 = f"Температура: {data_3[0]['Temperature']['Value']} ℃"
-        accuweather_par4 = f"Вероятность осадков: {data_3[0]['PrecipitationProbability']} %"
+        accuweather_par4 = f"Ощущается как: {data_3[0]['RealFeelTemperature']['Value']} ℃"
+        accuweather_par5 = f"Скорость ветра: {data_3[0]['Wind']['Speed']['Value']} км/ч"
+        accuweather_par6 = f"Направление ветра: {data_3[0]['Wind']['Direction']['Localized']}"
+        accuweather_par7 = f"Влажность воздуха: {data_3[0]['RelativeHumidity']} %"
+        accuweather_par8 = f"Вероятность выпадения осадков: {data_3[0]['PrecipitationProbability']} %"
         # --------------------------------------------------------------------------------------------------------------
         res_w = requests.get("http://api.weatherapi.com/v1/current.json?",
                              params={'key': weatherapi_key, 'lang': 'ru', 'query': name_city2})
@@ -116,7 +120,7 @@ def foo():
     except Exception:
         city_param = 'Город с таким названием не найден.'
         return render_template("index.html", city_param=city_param)
-    return render_template("get_text.html",
+    return render_template("weather_forecast.html",
                            city_param=city_param,
                            openweather_par0=openweather_par0, openweather_par1=openweather_par1,
                            openweather_par2=openweather_par2, openweather_par3=openweather_par3,
@@ -124,7 +128,9 @@ def foo():
                            openweather_par6=openweather_par6, openweather_par7=openweather_par7,
                            accuweather_par0=accuweather_par0, accuweather_par1=accuweather_par1,
                            accuweather_par2=accuweather_par2, accuweather_par3=accuweather_par3,
-                           accuweather_par4=accuweather_par4,
+                           accuweather_par4=accuweather_par4, accuweather_par5=accuweather_par5,
+                           accuweather_par6=accuweather_par6, accuweather_par7=accuweather_par7,
+                           accuweather_par8=accuweather_par8,
                            weatherapi_par0=weatherapi_par0, weatherapi_par1=weatherapi_par1,
                            weatherapi_par2=weatherapi_par2, weatherapi_par3=weatherapi_par3,
                            weatherapi_par4=weatherapi_par4, weatherapi_par5=weatherapi_par5,

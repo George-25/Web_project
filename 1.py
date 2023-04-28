@@ -16,6 +16,7 @@ openweathermap_key = "078007e7d84335abcc1c77d2160b20e3"
 accuweather_key = "xVwx5iGlsnoziBNp1ZbGJJnJ1PfO1tPh"
 weatherapi_key = '883b49c44e0542b6b51201949232504'
 tomorrow_key = "CkmUQHdwsAvkX9VfjkxuzEXl4V8Wz8Pm"
+table_name = ''
 api = Api(app)
 
 
@@ -68,13 +69,18 @@ def weather_forecast():
     name_city = f"{request.form['name_city']},RU"
     name_city2 = request.form['name_city']
     city_param = name_city2
-    # conn = sqlite3.connect('db/blogs.db')
-    # with conn:
-    #     conn.execute(f"""INSERT INTO {name_table}(city)
-    #                         VAlUES({name_city});
-    #                         """)
-    # conn.commit()
-    # conn.close()
+    # ------------------------------------------------------------------------------------------------------------------
+    conn = sqlite3.connect('db/blogs.db')
+    cur = conn.cursor()
+    city1 = cur.execute(f"""SELECT city FROM bebra
+                WHERE city = ?""", (name_city2,)).fetchall()
+    if len(city1) == 0 and table_name != '':
+        with conn:
+            cur.execute(f"""INSERT INTO {table_name}(city)
+                                VAlUES(?);""", (name_city2,))
+    conn.commit()
+    conn.close()
+    # ------------------------------------------------------------------------------------------------------------------
     try:
         res = requests.get("http://api.openweathermap.org/data/2.5/weather?",
                            params={'q': name_city, 'units': 'metric', 'lang': 'ru', 'APPID': openweathermap_key})
@@ -172,6 +178,8 @@ def login():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
+        global table_name
+        table_name = user.name
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")

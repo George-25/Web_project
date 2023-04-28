@@ -15,6 +15,7 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 openweathermap_key = "078007e7d84335abcc1c77d2160b20e3"
 accuweather_key = "xVwx5iGlsnoziBNp1ZbGJJnJ1PfO1tPh"
 weatherapi_key = '883b49c44e0542b6b51201949232504'
+tomorrow_key = "CkmUQHdwsAvkX9VfjkxuzEXl4V8Wz8Pm"
 api = Api(app)
 
 
@@ -75,7 +76,7 @@ def weather_forecast():
     # conn.commit()
     # conn.close()
     try:
-        res = requests.get("http://api.openweathermap.org/data/2.5/weather",
+        res = requests.get("http://api.openweathermap.org/data/2.5/weather?",
                            params={'q': name_city, 'units': 'metric', 'lang': 'ru', 'APPID': openweathermap_key})
         data = res.json()
         openweather_par0 = 'Openweathermap.org'
@@ -84,8 +85,9 @@ def weather_forecast():
         openweather_par3 = f"Ощущается как: {data['main']['feels_like']} ℃"
         openweather_par4 = f"Минимальная температура: {data['main']['temp_min']} ℃"
         openweather_par5 = f"Максимальная температура: {data['main']['temp_max']} ℃"
-        openweather_par6 = f"Атмосферное давление: {data['main']['pressure']} hPa"
-        openweather_par7 = f"Влажность воздуха: {data['main']['humidity']} %"
+        openweather_par6 = f"Скорость ветра: {data['wind']['speed']} м/с"
+        openweather_par7 = f"Атмосферное давление: {data['main']['pressure']} hPa"
+        openweather_par8 = f"Влажность воздуха: {data['main']['humidity']} %"
         # --------------------------------------------------------------------------------------------------------------
         res_location = requests.get("http://dataservice.accuweather.com/locations/v1/cities/search?",
                                     params={'apikey': accuweather_key, 'q': name_city2, 'language': 'ru'})
@@ -117,6 +119,20 @@ def weather_forecast():
         weatherapi_par6 = f"Количество осадков: {data_4['current']['precip_mm']} мм"
         weatherapi_par7 = f"Влажность воздуха: {data_4['current']['humidity']} %"
         weatherapi_par8 = f"Облачный покров: {data_4['current']['cloud']} %"
+        # --------------------------------------------------------------------------------------------------------------
+        res_t = requests.get("https://api.tomorrow.io/v4/weather/realtime?",
+                             params={'apikey': tomorrow_key, 'location': name_city2, 'language': 'ru',
+                                     'metric': 'true'})
+        data_5 = res_t.json()
+        tomorrow_par0 = 'Tomorrow.io'
+        tomorrow_par1 = f"Температура: {data_5['data']['values']['temperature']} ℃"
+        tomorrow_par2 = f"Ощущается как: {data_5['data']['values']['temperatureApparent']} ℃"
+        tomorrow_par3 = f"Облачность: {data_5['data']['values']['cloudCover']} %"
+        tomorrow_par4 = f"Скорость ветра: {data_5['data']['values']['windSpeed']} м/с"
+        tomorrow_par5 = f"Видимость: {data_5['data']['values']['visibility']} км"
+        tomorrow_par6 = f"Влажность воздуха: {data_5['data']['values']['humidity']} %"
+        tomorrow_par7 = f"Атмосферное давление: {data_5['data']['values']['pressureSurfaceLevel']} hPa"
+        tomorrow_par8 = f"Вероятность выпадения осадков: {data_5['data']['values']['precipitationProbability']} %"
     except Exception:
         city_param = 'Город с таким названием не найден.'
         return render_template("index.html", city_param=city_param)
@@ -126,6 +142,7 @@ def weather_forecast():
                            openweather_par2=openweather_par2, openweather_par3=openweather_par3,
                            openweather_par4=openweather_par4, openweather_par5=openweather_par5,
                            openweather_par6=openweather_par6, openweather_par7=openweather_par7,
+                           openweather_par8=openweather_par8,
                            accuweather_par0=accuweather_par0, accuweather_par1=accuweather_par1,
                            accuweather_par2=accuweather_par2, accuweather_par3=accuweather_par3,
                            accuweather_par4=accuweather_par4, accuweather_par5=accuweather_par5,
@@ -135,7 +152,10 @@ def weather_forecast():
                            weatherapi_par2=weatherapi_par2, weatherapi_par3=weatherapi_par3,
                            weatherapi_par4=weatherapi_par4, weatherapi_par5=weatherapi_par5,
                            weatherapi_par6=weatherapi_par6, weatherapi_par7=weatherapi_par7,
-                           weatherapi_par8=weatherapi_par8
+                           weatherapi_par8=weatherapi_par8,
+                           tomorrow_par0=tomorrow_par0, tomorrow_par1=tomorrow_par1, tomorrow_par2=tomorrow_par2,
+                           tomorrow_par3=tomorrow_par3, tomorrow_par4=tomorrow_par4, tomorrow_par5=tomorrow_par5,
+                           tomorrow_par6=tomorrow_par6, tomorrow_par7=tomorrow_par7, tomorrow_par8=tomorrow_par8
                            )
 
 

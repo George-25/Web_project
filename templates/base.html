@@ -47,9 +47,31 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/logout">Выйти</a>
+                            <a type="button" class="nav-link active" aria-current="page" data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop">Выйти</a>
                         </li>
                     </ul>
+                </div>
+            </div>
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-color-dark">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h4><font color="#000"> Вы уверены, что хотите выйти из аккаунта?</font></h4>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-secondary" data-bs-dismiss="modal">
+                                Отменить
+                            </a>
+                            <a class="btn btn-primary" href="/logout">Да </a>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% else %}

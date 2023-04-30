@@ -48,12 +48,45 @@
                         </li>
                         <li class="nav-item">
                             <a type="button" class="nav-link active" aria-current="page" data-bs-toggle="modal"
-                               data-bs-target="#staticBackdrop">Выйти</a>
+                               data-bs-target="#staticBackdrop1">Установить пользовательский фон</a>
+                            <a type="button" class="nav-link active" aria-current="page" data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop2">Выйти</a>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+            <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static"
+                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-color-dark">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title fs-5" id="exampleModalLabel"><font color="#000">Смена фона</font>
+                            </h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <font color="#000"> <input type="file"
+                                                       id="avatar" name="avatar"
+                                                       accept="image/png, image/jpeg"></font>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-secondary" data-bs-dismiss="modal">
+                                Закрыть
+                            </a>
+                            <script> document.querySelector("input").onchange = function() {
+  var url = URL.createObjectURL(this.files[0]);
+  document.body.style.background = "url(" + url + ") no-repeat";
+  document.body.style.backgroundSize = "100% auto";
+  document.body.style.backgroundPosition = "center top";
+}
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static"
                  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                  aria-hidden="true">
                 <div class="modal-dialog modal-color-dark">
